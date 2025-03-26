@@ -1,0 +1,6 @@
+{
+    "title": "Get a Ticket",
+    "issueButton": "Issue Ticket",
+    "currentTicket": "Current Ticket: {{number}}",
+    "noLicense": "License Not Active"
+  }

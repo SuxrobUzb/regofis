@@ -1,0 +1,6 @@
+{
+    "title": "Получить талон",
+    "issueButton": "Выдать талон",
+    "currentTicket": "Текущий талон: {{number}}",
+    "noLicense": "Лицензия не активна"
+  }

@@ -1,0 +1,7 @@
+{
+    "current": "Current: {{number}}",
+    "queue": "Queue:",
+    "noTicket": "No",
+    "callNext": "Call Next",
+    "noLicense": "License Not Active"
+  }

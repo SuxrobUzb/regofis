@@ -1,0 +1,15 @@
+{
+    "appId": "com.queue.kiosk-org1",
+    "win": {
+      "target": "nsis"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "SuxrobUzb",
+        "repo": "regoffis",
+        "releaseType": "release",
+        "channel": "kiosk-org-1"
+      }
+    ]
+  }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Инфокиоск</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; background-color: #f0f0f0; }
+    button { padding: 15px 30px; font-size: 18px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+    #currentTicket { font-size: 24px; margin-top: 20px; }
+    .lang-btn { padding: 5px 10px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1></h1>
+  <button id="issueButton"></button>
+  <div id="currentTicket"></div>
+  <div>
+    <button class="lang-btn" onclick="i18n.changeLanguage('uz')">UZ</button>
+    <button class="lang-btn" onclick="i18n.changeLanguage('ru')">RU</button>
+    <button class="lang-btn" onclick="i18n.changeLanguage('en')">EN</button>
+  </div>
+  <script src="./src/renderer.js"></script>
+</body>
+</html>

@@ -1,50 +1,40 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const logger = require('../utils/logger');
-
-const SECRET_KEY = 'your-secret-key'; // В реальном проекте используйте переменные окружения
 
 const authController = {
   async login(req, res) {
     const { username, password } = req.body;
-
     try {
       const user = await User.findByUsername(username);
-      if (!user) {
-        return res.status(401).json({ message: 'Неверное имя пользователя или пароль' });
+      if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(401).json({ message: 'Login yoki parol xato' });
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Неверное имя пользователя или пароль' });
-      }
-
-      const token = jwt.sign({ id: user.id, role: user.role }, SECRET_KEY, { expiresIn: '1h' });
-      logger.info(`User ${username} logged in`);
+      const token = jwt.sign(
+        { id: user.id, role: user.role, orgId: user.org_id },
+        req.app.locals.SECRET_KEY,
+        { expiresIn: '1h' }
+      );
       res.json({ token });
     } catch (error) {
-      logger.error('Login error:', error);
-      res.status(500).json({ message: 'Ошибка сервера' });
+      logger.error('Login xatosi:', error);
+      res.status(500).json({ message: 'Server xatosi' });
     }
   },
 
   async register(req, res) {
-    const { username, password, role } = req.body;
-
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Faqat adminlar uchun ruxsat' });
+    }
+    const { username, password, role, orgId } = req.body;
     try {
-      const existingUser = await User.findByUsername(username);
-      if (existingUser) {
-        return res.status(400).json({ message: 'Пользователь уже существует' });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = await User.create({ username, password: hashedPassword, role });
-      logger.info(`User ${username} created`);
-      res.status(201).json(newUser);
+      const user = await User.create({ username, password, role, orgId });
+      res.json({ message: 'Foydalanuvchi yaratildi', userId: user.id });
     } catch (error) {
-      logger.error('Registration error:', error);
-      res.status(500).json({ message: 'Ошибка сервера' });
+      logger.error('Ro‘yxatdan o‘tish xatosi:', error);
+      res.status(500).json({ message: 'Server xatosi' });
     }
   }
 };
