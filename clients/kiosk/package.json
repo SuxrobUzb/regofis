@@ -1,0 +1,21 @@
+{
+    "name": "queue-kiosk",
+    "version": "1.0.0",
+    "main": "src/main.js",
+    "scripts": {
+      "start": "electron .",
+      "build": "electron-builder"
+    },
+    "dependencies": {
+      "electron": "^22.0.0"
+    },
+    "devDependencies": {
+      "electron-builder": "^23.6.0"
+    },
+    "build": {
+      "appId": "com.queue.kiosk",
+      "win": {
+        "target": "nsis"
+      }
+    }
+  }

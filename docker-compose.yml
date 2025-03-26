@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  api:
+    build: ./web_portal/api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always # Автозагрузка при перезапуске контейнера
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=queue_user
+      - POSTGRES_PASSWORD=secure_password
+      - POSTGRES_DB=queue_system
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:6
+    volumes:
+      - redisdata:/data
+    restart: always
+
+volumes:
+  pgdata:
+  redisdata:
