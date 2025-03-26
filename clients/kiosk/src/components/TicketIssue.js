@@ -8,6 +8,7 @@ class TicketIssue {
     this.ticketNumber = 0;
     this.tariff = null;
     this.orgStyles = null;
+    this.loading = false;
     this.init();
   }
 
@@ -32,60 +33,44 @@ class TicketIssue {
   }
 
   async issueTicket() {
-    if (!this.tariff || !this.tariff.tariffId) {
-      document.getElementById('currentTicket').innerText = i18n.t('noLicense');
-      return;
-    }
+    if (this.loading) return;
+    this.loading = true;
+    this.render();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/tickets/issue', {
-        timestamp: new Date().toISOString(),
-      });
+      const token = localStorage.getItem('token');
+      const orgId = ipcRenderer.sendSync('get-org-id'); // Main.js’dan olish uchun
+      const response = await axios.post(
+        'http://localhost:3000/api/tickets/issue',
+        { timestamp: new Date().toISOString(), orgId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       this.ticketNumber = response.data.ticketNumber;
-      this.printTicket();
-      this.updateDisplay();
+      offlineSync.storeTicket(this.ticketNumber);
     } catch (error) {
-      console.error('Error issuing ticket:', error);
-      this.handleOfflineMode();
+      console.error('Talon berishda xato:', error);
+      offlineSync.storePending({ type: 'issue', timestamp: new Date().toISOString() });
+    } finally {
+      this.loading = false;
+      this.render();
     }
-  }
-
-  printTicket() {
-    ipcRenderer.send('print-ticket', {
-      number: this.ticketNumber,
-      time: new Date().toLocaleTimeString(),
-    });
-  }
-
-  updateDisplay() {
-    document.getElementById('currentTicket').innerText = i18n.t('currentTicket', { number: this.ticketNumber });
-  }
-
-  handleOfflineMode() {
-    this.ticketNumber = offlineSync.getNextOfflineNumber();
-    const ticket = {
-      number: this.ticketNumber,
-      timestamp: new Date().toISOString(),
-    };
-    offlineSync.addOfflineTicket(ticket);
-    this.printTicket();
-    this.updateDisplay();
   }
 
   render() {
-    document.querySelector('h1').innerText = i18n.t('title');
-    document.getElementById('issueButton').innerText = i18n.t('issueButton');
-    this.updateUI();
-  }
-
-  updateUI() {
-    if (!this.tariff || !this.tariff.tariffId) {
-      document.getElementById('issueButton').disabled = true;
-      document.getElementById('currentTicket').innerText = i18n.t('noLicense');
+    document.getElementById('app').innerHTML = `
+      <div>
+        <h1>${i18n.t('issueTicket')}</h1>
+        ${this.loading ? '<div class="spinner">Yuklanmoqda...</div>' : `
+          <button id="issueButton">${i18n.t('getTicket')}</button>
+          ${this.ticketNumber ? `<p>${i18n.t('yourTicket')}: ${this.ticketNumber}</p>` : ''}
+        `}
+      </div>
+    `;
+    this.applyStyles();
+    if (!this.loading) {
+      document.getElementById('issueButton').addEventListener('click', () => this.issueTicket());
     }
   }
 }
-
-new TicketIssue();
 
 module.exports = TicketIssue;

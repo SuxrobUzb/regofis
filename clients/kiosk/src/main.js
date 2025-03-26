@@ -56,9 +56,8 @@ function createWindow(license) {
 }
 
 app.whenReady().then(async () => {
-  autoUpdater.setFeedURL({
-    provider: 'generic',
-    url: `http://localhost:3000/api/updates/check?orgId=${ORG_ID}&appType=${APP_TYPE}&currentVersion=${CURRENT_VERSION}`,
+  ipcMain.on('get-org-id', (event) => {
+    event.returnValue = ORG_ID;
   });
   autoUpdater.checkForUpdates();
 

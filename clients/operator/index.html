@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Операторская станция</title>
   <meta charset="UTF-8">
+  <title>Operator Station</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="queueDisplay"></div>
-  <button id="callNextButton">Вызвать следующего</button>
-  <script src="./src/renderer.js"></script>
+  <div id="app"></div>
+  <div id="scanner-container" style="display: none;"></div> <!-- Scanner uchun -->
+  <script>
+    require('./renderer.js');
+    const Scanner = require('./utils/scanner');
+    const scanner = new Scanner();
+
+    // Scanner’ni faollashtirish uchun misol tugma
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 's') { // 's' tugmasi bilan skaner ochiladi
+        document.getElementById('scanner-container').style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>

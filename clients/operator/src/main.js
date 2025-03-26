@@ -105,9 +105,17 @@ function createWindow(license, token) {
 }
 
 app.whenReady().then(async () => {
-  autoUpdater.setFeedURL({
-    provider: 'generic',
-    url: `http://localhost:3000/api/updates/check?orgId=${ORG_ID}&appType=${APP_TYPE}¤tVersion=${CURRENT_VERSION}`,
+  ipcMain.on('get-org-id', (event) => {
+    event.returnValue = ORG_ID;
+  });
+  ipcMain.on('get-user-id', (event) => {
+    const token = localStorage.getItem('token');
+    const decoded = jwt.decode(token);
+    event.returnValue = decoded.id;
+  });
+  ipcMain.on('notify', (event, data) => {
+    const win = BrowserWindow.getFocusedWindow();
+    win.webContents.send('notification', data);
   });
   autoUpdater.checkForUpdates();
 

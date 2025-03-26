@@ -51,3 +51,19 @@ body {
   #queueDisplay {
     margin-bottom: 20px;
   }
+  .stats-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  #scanner-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }

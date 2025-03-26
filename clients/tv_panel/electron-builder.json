@@ -1,0 +1,24 @@
+{
+    "productName": "QueueTVPanel",
+    "appId": "com.queue.tvpanel",
+    "directories": {
+      "output": "../../installers/tv_panel"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "files": [
+      "dist/**/*",
+      "src/**/*",
+      "index.html",
+      "package.json",
+      "assets/**/*"
+    ]
+  }

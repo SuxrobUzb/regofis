@@ -1,15 +1,23 @@
 {
-    "appId": "com.queue.kiosk-org1",
-    "win": {
-      "target": "nsis"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "SuxrobUzb",
-        "repo": "regoffis",
-        "releaseType": "release",
-        "channel": "kiosk-org-1"
-      }
-    ]
-  }
+  "productName": "QueueKiosk",
+  "appId": "com.queue.kiosk",
+  "directories": {
+    "output": "../../installers/kiosk"
+  },
+  "win": {
+    "target": "nsis",
+    "icon": "src/assets/icon.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "index.html",
+    "package.json"
+  ]
+}
